@@ -36,8 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'users_app',
-    'corsheaders'
+    'ToDoapp'
 
 ]
 
@@ -123,9 +124,14 @@ STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'users_app.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+}
 
-## cors
+# cors
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
 ]

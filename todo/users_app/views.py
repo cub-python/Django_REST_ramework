@@ -1,8 +1,10 @@
+from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
 from rest_framework.viewsets import ModelViewSet
-from .serializers import UserSerializer
+from .serializers import UserModelSerializer
 from .models import User
 
 
-class UserViewSet(ModelViewSet):
-    serializer_class = UserSerializer
+class UserModelViewSet(ModelViewSet):
+    renderer_classes = [JSONRenderer,BrowsableAPIRenderer]
+    serializer_class = UserModelSerializer
     queryset = User.objects.all()
