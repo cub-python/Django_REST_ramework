@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from users_app.models import User
 
+
 class Command(BaseCommand):
     help = 'Create Superuser and some test users'
 
@@ -10,8 +11,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         User.objects.all().delete()
         user_count = options['count']
-        User.objects.create_superuser('Nikola','Nikola@test.ru', 'usertest1')
+        User.objects.create_superuser('Nikola', 'Nikola@drf.ru', 'drf1')
         for i in range(user_count):
-            User.objects.create_user(f'user{i}', f'user{i}@test.ru', 'usertest1')
+            User.objects.create_user(f'user{i}', f'user{i}@drftest.ru', 'drf1')
 
         print('done')
