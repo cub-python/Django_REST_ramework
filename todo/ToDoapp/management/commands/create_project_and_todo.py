@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 
 from ToDoapp.models import Project, ToDo
 
+
 class Command(BaseCommand):
     help = 'Create project and todo'
 
