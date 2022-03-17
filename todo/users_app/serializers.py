@@ -1,9 +1,22 @@
-from rest_framework.serializers import ModelSerializer
-from .models import User
+from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
+from .models import User, Brend, Biography
 
 
-class UserModelSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        # fields = '__al__'
         fields = ('username', 'first_name', 'last_name', 'email')
+
+
+class BiographySerializer(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Biography
+        fields = '__all__'
+
+
+class BrendSerializer(ModelSerializer):
+
+    class Meta:
+        model = Brend
+        fields = '__all__'

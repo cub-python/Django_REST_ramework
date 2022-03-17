@@ -11,8 +11,12 @@ import './bootstrap/css/sticky-footer-navbar.css';
 import Footer from './components/Footer.js';
 import Navbar from './components/Menu.js';
 import UserList from './components/User.js';
+import BrendList from "./components/Brend.js";
+import NotFound404 from "./components/NotFound404.js";
+import BrendListUsers from "./components/BrendUser.js";
 import {ProjectList, ProjectDetail} from './components/Project.js'
 import ToDoList from './components/ToDo.js'
+
 import axios from 'axios'
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
