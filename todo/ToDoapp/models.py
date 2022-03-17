@@ -1,7 +1,8 @@
+
 from django.db import models
 
 # Create your models here.
-# from django.db import models
+from django.db import models
 from users_app.models import User
 
 
@@ -15,7 +16,7 @@ class Project(models.Model):
 
 
 class ToDo(models.Model):
-    project = models.TextField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     text = models.TextField()
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
