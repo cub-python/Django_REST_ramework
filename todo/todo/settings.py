@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_filters',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'users_app',
-    'ToDoapp'
+    'ToDoapp',
+
 
 ]
 
@@ -53,6 +57,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# ROOT_URLCONF = 'todo.urls_example'
 ROOT_URLCONF = 'todo.urls'
 
 TEMPLATES = [
@@ -120,18 +126,33 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
+
+
 ##
 AUTH_USER_MODEL = 'users_app.User'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.IsAdminUser'
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+            ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',   # размер пагиации 100
+    # 'PAGE_SIZE': 100
 }
 
 # cors
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
+    # "http://127.0.0.1:3002",
     "http://localhost:3000",
+    # "http://localhost:3002",
 ]
