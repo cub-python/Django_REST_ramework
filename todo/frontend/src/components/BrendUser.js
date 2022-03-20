@@ -47,4 +47,4 @@ const BrendListUsers = ({brends,users}) => {
     )
 }
 
-export default BookListAuthors;
+export default BrendListUsers;
