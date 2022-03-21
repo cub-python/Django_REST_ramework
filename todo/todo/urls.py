@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from users_app.views import UserViewSet,BrendViewSet,BiographyViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -26,6 +27,8 @@ from users_app.views import UserViewSet
 
 router = DefaultRouter()
 router.register('users', UserViewSet)
+router.register('brends', BrendViewSet)
+router.register('biography', BiographyViewSet)
 router.register('todos', ToDoViewSet)
 router.register('projects', ProjectViewSet)
 

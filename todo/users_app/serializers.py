@@ -8,7 +8,7 @@ class UserSerializer(ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'email')
 
 
-class BiographySerializer(HyperlinkedModelSerializer):
+class BiographySerializer(ModelSerializer):
 
     class Meta:
         model = Biography

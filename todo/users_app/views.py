@@ -14,12 +14,13 @@ class StaffOnly(BasePermission):
 
 
 class UserViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = [StaffOnly]
+    # permission_classes = [StaffOnly]
 
 
 class BiographyViewSet(ModelViewSet):
