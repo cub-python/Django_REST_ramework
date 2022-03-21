@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 const ProjectListItem = ({item}) => {
-    let link_to = '/project/${item.id}'
+    let link_to = `/project/${item.id}`
     return (
         <tr>
             <td>{item.id}</td>
@@ -17,6 +17,7 @@ const ProjectListItem = ({item}) => {
 }
 
 const ProjectList = ({items}) => {
+
     return (
         <table className="table">
             <tr>
@@ -46,7 +47,7 @@ const ProjectDetail = ({getProject, item}) => {
     return (
         <div>
             <h1>{item.name}</h1>
-            Repository: <a href={item.repository}>{item.repository} </a>
+            Repository: <a href={item.repository}>{item.repository}</a>
             <p></p>
             Users:
             <ol>
