@@ -46,11 +46,11 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-router.register('user', UserViewSet)
-router.register('brend', BrendViewSet)
+router.register('users', UserViewSet)
+router.register('brends', BrendViewSet)
 router.register('biography', BiographyViewSet)
-router.register('todo', ToDoViewSet)
-router.register('project', ProjectViewSet)
+router.register('todos', ToDoViewSet)
+router.register('projects', ProjectViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

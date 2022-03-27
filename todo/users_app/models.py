@@ -11,7 +11,7 @@ class User(AbstractUser):
 
 class Biography(models.Model):
     text = models.TextField(null=True, blank=True)
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class Brend(models.Model):
