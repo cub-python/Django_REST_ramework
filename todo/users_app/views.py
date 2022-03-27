@@ -21,6 +21,8 @@ class UserViewSet(mixins.ListModelMixin,
     # serializer_class = UserSerializer
     queryset = User.objects.all()
 
+    # permission_classes = [StaffOnly]
+
     def get_serializer_class(self):
         if self.request.version == 'v2':
             return UserSerializerWithIsSuperuserStaff

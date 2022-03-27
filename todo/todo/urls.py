@@ -20,6 +20,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter,SimpleRouter
+from rest_framework.routers import DefaultRouter
 from users_app.views import UserViewSet,BrendViewSet,BiographyViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -46,6 +47,7 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
+
 router.register('user', UserViewSet)
 router.register('brend', BrendViewSet)
 router.register('biography', BiographyViewSet)
