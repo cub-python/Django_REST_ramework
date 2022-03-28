@@ -1,14 +1,15 @@
 import React from 'react';
+import './App.css';
 import axios from "axios";
-import logo from './logo.svg';
-import {HashRouter, Route, BrowserRouter, Link, Switch,Redirect}
+// import from './logo.svg';
+import {BrowserRouter, Link, Route, Routes}
 from "react-router-dom";
 import './bootstrap/css/bootstrap.min.css'
 import './bootstrap/css/sticky-footer-navbar.css'
 import Footer from './components/Footer.js'
 import Navbar from './components/Menu.js'
 import UserList from './components/User.js'
-import {ProjectList, ProjectDetail} from './components/Project.js'
+import ProjectList from './components/Project.js'
 import ToDoList from './components/ToDo.js'
 import LoginForm from './components/Auth.js'
 import Cookies from 'universal-cookie';
@@ -17,25 +18,19 @@ import Nav from 'react-bootstrap/Nav';
 
 import NotFound404 from "./components/NotFound404.js";
 
-const DOMAIN = 'http://127.0.0.1:8000/api/'
-const get_url = (url) => `${DOMAIN}${url}`
+// const DOMAIN = 'http://127.0.0.1:8000/api/'
+// const get_url = (url) => `${DOMAIN}${url}`
 
 
 class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            // navbarItems: [
-            //     {name: 'Users', href: '/'},
-            //     {name: 'Projects', href: '/projects'},
-            //     {name: 'TODOs', href: '/todos'},
-            // ],
             users: [],
             projects: [],
             project: {},
             todos: [],
             'token': "",
-            // auth: {username: '', is_login: false}
         }
     }
        set_token(token) {
@@ -78,7 +73,7 @@ class App extends React.Component {
                 const usersDRF = response.data
                 this.setState(
                     {
-                        'usersDRF': usersDRF
+                        'users': user
                     }
                 );
             }).catch(error => console.log(error))
