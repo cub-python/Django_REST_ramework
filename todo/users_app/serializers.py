@@ -17,6 +17,7 @@ class UserSerializerWithIsSuperuserStaff(ModelSerializer):
         fields = ('username','email','first_name','last_name','is_superuser', 'is_staff',)
 
 
+
 class BiographySerializer(ModelSerializer):
 
     class Meta:
