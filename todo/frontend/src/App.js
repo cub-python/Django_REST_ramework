@@ -50,10 +50,7 @@ class App extends React.Component {
                 localStorage.setItem('refresh', refresh)
                 this.setState({'auth': {username: username, is_login: true}})
                 this.load_data()
-                 //    <BrowserRouter>
-                 //     <Switch>
-                 // <Redirect from='/authors1' to='/'/>
-                 //     <Switch>
+
             }).catch(error => {
             if (error.response.status === 401) {
                 alert('Неверный логин или пароль')
