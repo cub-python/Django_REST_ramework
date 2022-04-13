@@ -1,170 +1,152 @@
-
 import React from 'react';
-// import logo from './logo.svg';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    // Redirect
-} from "react-router-dom";
-import axios from 'axios'
+import './App.css';
+import axios from "axios";
+// import from './logo.svg';
+import {BrowserRouter, Link, Route, Routes}
+from "react-router-dom";
 import './bootstrap/css/bootstrap.min.css'
 import './bootstrap/css/sticky-footer-navbar.css'
 import Footer from './components/Footer.js'
 import Navbar from './components/Menu.js'
 import UserList from './components/User.js'
-import {ProjectList, ProjectDetail} from './components/Project.js'
+import ProjectList from './components/Project.js'
 import ToDoList from './components/ToDo.js'
 import LoginForm from './components/Auth.js'
+import Cookies from 'universal-cookie';
+import Nav from 'react-bootstrap/Nav';
 
 
-const DOMAIN = 'http://127.0.0.1:8000/api/'
-const get_url = (url) => `${DOMAIN}${url}`
+import NotFound404 from "./components/NotFound404.js";
+
+// const DOMAIN = 'http://127.0.0.1:8000/api/'
+// const get_url = (url) => `${DOMAIN}${url}`
 
 
 class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            navbarItems: [
-                {name: 'Users', href: '/'},
-                {name: 'Projects', href: '/projects'},
-                {name: 'TODOs', href: '/todos'},
-            ],
             users: [],
             projects: [],
             project: {},
             todos: [],
-            auth: {username: '', is_login: false}
+            'token': "",
         }
     }
+       set_token(token) {
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({'token': token}, () => this.load_data())
+    }
 
-    login(username, password) {
-        axios.post(get_url('token/'), {username: username, password: password})
+        get_token_from_storage() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token}, () => this.load_data())
+    }
+
+    is_authenticated() {
+        return this.state.token !== ''
+    }
+
+    get_token(username, password) {
+        axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
             .then(response => {
-                const result = response.data
-                const access = result.access
-                const refresh = result.refresh
-                localStorage.setItem('login', username)
-                localStorage.setItem('access', access)
-                localStorage.setItem('refresh', refresh)
-                this.setState({'auth': {username: username, is_login: true}})
-                this.load_data()
-                 //    <BrowserRouter>
-                 //     <Switch>
-                 // <Redirect from='/authors1' to='/'/>
-                 //     <Switch>
-            }).catch(error => {
-            if (error.response.status === 401) {
-                alert('Неверный логин или пароль')
-            } else {
-                console.log(error)
-            }
-        })
+                this.set_token(response.data['token'])
+            }).catch(error => alert('Неверный логин или пароль'))
     }
 
-
-    logout() {
-        localStorage.setItem('login', '')
-        localStorage.setItem('access', '')
-        localStorage.setItem('refresh', '')
-        this.setState({'auth': {username: '', is_login: false}})
-    }
-
-    load_data() {
+    get_headers() {
         let headers = {
             'Content-Type': 'application/json'
         }
-        if (this.state.auth.is_login) {
-            const token = localStorage.getItem('access')
-            headers['Authorization'] = 'Bearer ' + token
+        if (this.is_authenticated()) {
+            headers['Authorization'] = 'Token ' + this.state.token
         }
+        return headers
+    }
 
-        axios.get(get_url('users/'), {headers})
+    load_data() {
+        const headers = this.get_headers()
+        axios.get('http://127.0.0.1:8000/api/users/', {headers})
             .then(response => {
-                //console.log(response.data)
-                this.setState({users: response.data})
-            }).catch(error =>
+                const usersDRF = response.data
+                this.setState(
+                    {
+                        'users': user
+                    }
+                );
+            }).catch(error => console.log(error))
 
-            console.log(error)
-        )
-
-        axios.get(get_url('projects/'), {headers})
+        axios.get('http://127.0.0.1:8000/api/projects/', {headers})
             .then(response => {
-                //console.log(response.data)
-                this.setState({projects: response.data})
-            }).catch(error =>
-            console.log(error)
-        )
+                const project = response.data.results
+                this.setState(
+                    {
+                        'projects': project
+                    }
+                );
+            }).catch(error => console.log(error))
 
-        axios.get(get_url('todos/'), {headers})
+        axios.get('http://127.0.0.1:8000/api/todo/', {headers})
             .then(response => {
-                //console.log(response.data)
-                this.setState({todos: response.data})
-            }).catch(error =>
-            console.log(error)
-        )
+                const todo = response.data.results
+                this.setState(
+                    {
+                        'todos': todo
+                    }
+                );
+            }).catch(error => console.log(error))
     }
 
     componentDidMount() {
-
-        // Получаем значения из localStorage
-        const username = localStorage.getItem('login')
-        if ((username !== "") & (username != null)) {
-            this.setState({'auth': {username: username, is_login: true}}, () => this.load_data())
-        }
+        this.get_token_from_storage()
     }
 
 
     render() {
         return (
-            <Router>
-                <header>
-                    <Navbar navbarItems={this.state.navbarItems} auth={this.state.auth} logout={() => this.logout()}/>
-                </header>
-                <main role="main" class="flex-shrink-0">
-                    <div className="container">
-                        <Switch>
-                            <Route exact path='/'>
-                                <UserList users={this.state.users}/>
-                            </Route>
-                            <Route exact path='/projects'>
-                                <ProjectList items={this.state.projects}/>
-                            </Route>
-                            <Route exact path='/todos'>
-                                <ToDoList items={this.state.todos}/>
-                            </Route>
-                            <Route exact path='/login'>
-                                <LoginForm login={(username, password) => this.login(username, password)}/>
-                            </Route>
-                            <Route path="/project/:id" children={<ProjectDetail getProject={(id) => this.getProject(id)}
-                                                                                item={this.state.project}/>}/>
-                        </Switch>
-                    </div>
-                </main>
+            <div className="App">
+                <BrowserRouter>
+                    <Navbar bg="light" expand="lg">
+                        <Container>
+                            <Navbar.Collapse id="basic-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link><Link to='/'>Home </Link></Nav.Link>
+                                    <Nav.Link><Link to='/users'>Users</Link></Nav.Link>
+                                    <Nav.Link><Link to='/projects'>Projects</Link></Nav.Link>
+                                    <Nav.Link><Link to='/todos'>ToDo</Link></Nav.Link>
 
+                                    <Nav.Link>
+                                        <li>
+                                            {this.is_authenticated() ?
+                                                <button onClick={() => this.logout()}>Logout</button> :
+                                                <Link to='/login'>Login</Link>}
+                                        </li>
+
+                                    </Nav.Link>
+                                </Nav>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                    <Routes>
+                        <Route path='/'/>
+                        <Route path='/users' element={<UserList users={this.state.users}/>}/>
+
+                        <Route path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
+                        <Route path="/projects/:id" element={<ProjectUser projects={this.state.projects}/>}/>
+
+                        <Route path='/todos' element={<ToDoList todos={this.state.todos}/>}/>
+
+                        <Route path='/login' element={<LoginForm
+                            get_token={(username, password) => this.get_token(username, password)}/>}/>
+
+                        <Route path="*" element={<NotFound404/>}/>
+                    </Routes>
+                </BrowserRouter>
                 <Footer/>
-            </Router>
-
-
+            </div>
         )
-    }
-
-    getProject(id) {
-
-        let headers = {
-            'Content-Type': 'application/json'
-        }
-        console.log(this.state.auth)
-        if (this.state.auth.is_login) {
-            const token = localStorage.getItem('access')
-            headers['Authorization'] = 'Bearer ' + token
-        }
-
-        axios.get(get_url(`/api/projects/${id}`), {headers})
-            .then(response => {
-                this.setState({project: response.data})
-            }).catch(error => console.log(error))
     }
 }
 
