@@ -29,6 +29,7 @@ from rest_framework_simplejwt.views import (
 )
 from ToDoapp.views import ToDoViewSet, ProjectViewSet
 from users_app.views import UserViewSet
+
 from user.views import UserListAPIView
 
 schema_view = get_schema_view(
