@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from users_app.models import User
+
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
